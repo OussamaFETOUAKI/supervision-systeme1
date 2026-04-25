@@ -1,0 +1,15 @@
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\controller\AuthController.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\repository\UserRepository.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\dto\IncidentDTO.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\config\CorsConfig.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\SmartCityApplication.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\model\User.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\config\DataLoader.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\service\AIAnalysisService.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\service\GeminiAIService.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\repository\IncidentRepository.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\service\UserService.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\controller\IncidentController.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\service\IncidentService.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\dto\StatusUpdateDTO.java
+C:\Users\hamza\Desktop\Supervision System\backend\src\main\java\com\smartcity\model\Incident.java
