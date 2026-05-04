@@ -106,3 +106,84 @@
 .slide-up {
   animation: slideUp 0.4s ease-out forwards;
 }
+
+/* Hide the ugly top frame of Google Translate and fix body offset */
+html { height: 100%; margin-top: 0 !important; }
+body { top: 0 !important; position: static !important; }
+
+/* Hide the top banner iframe */
+.skiptranslate > iframe.skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Hide annoying tooltips when hovering over translated text */
+.goog-tooltip, .goog-tooltip:hover { display: none !important; }
+.goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+
+/* Enforce Dark Theme on the Dropdown */
+#google_translate_element {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden !important;
+  border-radius: 12px;
+}
+
+#google_translate_element select.goog-te-combo {
+  background-color: #0f172a !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  padding: 10px 32px 10px 36px !important;
+  border-radius: 12px !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+  outline: none !important;
+  cursor: pointer !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+  transition: all 0.3s ease !important;
+  text-align: center !important;
+  margin: 0 !important;
+}
+
+#google_translate_element select.goog-te-combo:hover {
+  background-color: #020617 !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.4) !important;
+}
+
+/* Aggressively hide Google Logo, Powered By text, and white background wrappers */
+#google_translate_element .goog-te-gadget {
+  color: transparent !important;
+  font-size: 0px !important;
+  line-height: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+#google_translate_element .goog-te-gadget > span, 
+#google_translate_element .goog-te-gadget .goog-logo-link,
+#google_translate_element .goog-te-gadget img {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Remove default white padding around the widget */
+div.goog-te-gadget-simple {
+  border: none !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import { createIncident } from "@/lib/api";
@@ -24,6 +24,19 @@ function LocationPicker({ onLocationSelect }: { onLocationSelect: (lat: number, 
     return <MapEventsComp />;
 }
 
+function RecenterMap({ lat, lng }: { lat: number, lng: number }) {
+    const RecenterComp = dynamic(() => import("react-leaflet").then(mod => {
+        const { useMap } = mod;
+        const Component = () => {
+            const map = useMap();
+            map.setView([lat, lng]);
+            return null;
+        };
+        return Component;
+    }), { ssr: false });
+    return <RecenterComp />;
+}
+
 export default function ReportPage() {
     const { user } = useAuth();
     const router = useRouter();
@@ -43,10 +56,38 @@ export default function ReportPage() {
     const [submitting, setSubmitting] = useState(false);
     const [status, setStatus] = useState<{ msg: string; type: "success" | "error" } | null>(null);
 
+    useEffect(() => {
+        (async function initLeaflet() {
+            const L = (await import('leaflet')).default;
+            delete (L.Icon.Default.prototype as any)._getIconUrl;
+            L.Icon.Default.mergeOptions({
+                iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+                iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+                shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+            });
+        })();
+
+        // Fetch User's Real-Time GPS Location
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    updateLocationFromCoords(lat, lng);
+                },
+                (error) => {
+                    console.warn("Geolocation skipped or denied by user.");
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        }
+    }, []);
+
     const updateLocationFromCoords = async (lat: number, lng: number) => {
         setLatitude(lat); setLongitude(lng);
         try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+            const userLang = typeof navigator !== "undefined" ? navigator.language : "en-US";
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=${userLang}`);
             const data = await res.json();
             setLocation(data.display_name.split(',').slice(0, 3).join(',') || `${lat.toFixed(4)}, ${lng.toFixed(4)}`);
         } catch { setLocation(`${lat.toFixed(4)}, ${lng.toFixed(4)}`); }
@@ -176,6 +217,7 @@ export default function ReportPage() {
                                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                                         <Marker position={[latitude, longitude]} />
                                         <LocationPicker onLocationSelect={updateLocationFromCoords} />
+                                        <RecenterMap lat={latitude} lng={longitude} />
                                     </MapContainer>
                                 </div>
                                 {location && <p className="text-[9px] text-sky-500 font-black uppercase tracking-tighter px-2 truncate mt-3">Target: {location}</p>}
@@ -210,7 +252,7 @@ export default function ReportPage() {
                             </div>
                         )}
 
-                        <button type="submit" disabled={submitting || !imageUrl} className="w-full py-6 rounded-[2rem] bg-gradient-to-r from-sky-600 to-emerald-600 text-white font-black uppercase tracking-[0.4em] shadow-2xl hover:scale-[1.01] transition-all disabled:opacity-20 mt-6 leading-none">
+                        <button type="submit" disabled={submitting} className="w-full py-6 rounded-[2rem] bg-gradient-to-r from-sky-600 to-emerald-600 text-white font-black uppercase tracking-[0.4em] shadow-2xl hover:scale-[1.01] transition-all disabled:opacity-20 mt-6 leading-none">
                             {submitting ? "Processing Submission..." : "INITIALIZE UPLOAD"}
                         </button>
                     </form>

@@ -79,7 +79,7 @@ function IncidentCard({ incident }: { incident: Incident }) {
                     </div>
                     <div className="flex items-center justify-between text-[10px] font-black text-slate-700 uppercase tracking-widest border-t border-white/5 pt-5">
                         <span className="flex items-center gap-2 truncate max-w-[250px]">
-                            <span className="text-sky-500">📍</span> {incident.location.split(',')[0]}
+                            <span className="text-sky-500">📍</span> <span className="truncate max-w-[150px]">{incident.location}</span>
                         </span>
                         <span>🕒 {new Date(incident.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                     </div>

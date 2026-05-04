@@ -2,6 +2,7 @@ com\smartcity\controller\AuthController.class
 com\smartcity\service\UserService.class
 com\smartcity\service\IncidentService.class
 com\smartcity\SmartCityApplication.class
+com\smartcity\config\DataLoader.class
 com\smartcity\dto\StatusUpdateDTO.class
 com\smartcity\model\Incident.class
 com\smartcity\repository\UserRepository.class
@@ -11,4 +12,5 @@ com\smartcity\service\AIAnalysisService.class
 com\smartcity\config\CorsConfig$1.class
 com\smartcity\dto\IncidentDTO.class
 com\smartcity\model\User.class
+com\smartcity\controller\IncidentController.class
 com\smartcity\service\GeminiAIService.class

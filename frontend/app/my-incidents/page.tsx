@@ -163,7 +163,7 @@ export default function MyIncidentsPage() {
                         <div className="md:w-1/2 p-10 bg-slate-900/50 flex flex-col">
                             <h2 className="text-2xl font-black italic uppercase tracking-tighter text-white mb-6">Evidence Buffer</h2>
                             <div className="flex-1 relative rounded-[2.5rem] overflow-hidden border border-white/5 bg-black/40 group">
-                                <img src={editForm.imageUrl} className="w-full h-full object-cover" />
+                                {editForm.imageUrl ? <img src={editForm.imageUrl} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-[10px] font-black uppercase text-slate-700 tracking-widest">No Image</div>}
                                 <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all gap-4">
                                     <button onClick={startCamera} className="w-48 py-3 bg-sky-500 text-white font-black uppercase text-[10px] tracking-widest rounded-xl">Open Lens</button>
                                     <button onClick={() => fileInputRef.current?.click()} className="w-48 py-3 bg-white text-black font-black uppercase text-[10px] tracking-widest rounded-xl">Import Local</button>
@@ -226,7 +226,7 @@ export default function MyIncidentsPage() {
                             <div key={incident.id} className="glass rounded-[3rem] overflow-hidden border border-white/5 hover:border-white/10 transition-all group p-1.5">
                                 <div className="flex flex-col md:flex-row bg-slate-950/20 rounded-[2.5rem] overflow-hidden">
                                     <div className="md:w-64 h-48 md:h-auto shrink-0 overflow-hidden relative">
-                                        <img src={incident.imageUrl} className="w-full h-full object-cover" />
+                                        {incident.imageUrl ? <img src={incident.imageUrl} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-[10px] font-black uppercase text-slate-700 tracking-widest bg-slate-900">No Image</div>}
                                     </div>
                                     <div className="p-10 flex-1">
                                         <div className="flex justify-between items-start mb-6">
@@ -260,7 +260,7 @@ export default function MyIncidentsPage() {
                                         </div>
                                         <p className="text-slate-500 text-base mb-8 font-medium line-clamp-2 leading-relaxed opacity-80">{incident.description}</p>
                                         <div className="flex items-center justify-between text-[10px] font-black text-slate-700 uppercase tracking-widest pt-6 border-t border-white/5">
-                                            <span>TARGET REF: {incident.location.split(',')[0]}</span>
+                                            <span className="truncate max-w-[200px]">TARGET REF: {incident.location}</span>
                                             <span>INSTANCE: {new Date(incident.createdAt).toLocaleDateString()}</span>
                                         </div>
                                     </div>

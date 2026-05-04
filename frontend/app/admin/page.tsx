@@ -49,7 +49,7 @@ export default function AdminDashboard() {
             const [incData, statsData] = await Promise.all([fetchIncidents(), fetchStats()]);
             setIncidents(incData);
             setStats(statsData);
-        } catch { console.error("Access error"); } finally { setLoading(false); }
+        } catch (err) { console.error("Access error:", err); } finally { setLoading(false); }
     }
 
     const handleStatusUpdate = async (id: number, status: string) => {
@@ -172,7 +172,7 @@ export default function AdminDashboard() {
                                                 <div className="flex justify-between items-start mb-3">
                                                     <div>
                                                         <h3 className="text-white font-black uppercase tracking-tighter text-lg leading-none">{inc.title}</h3>
-                                                        <p className="text-[8px] font-bold text-slate-600 uppercase tracking-widest mt-1.5">LOCATION: {inc.location.split(',')[0]}</p>
+                                                        <p className="text-[8px] font-bold text-slate-600 uppercase tracking-widest mt-1.5 line-clamp-1">LOCATION: {inc.location}</p>
                                                     </div>
                                                     <div className="text-right">
                                                         <p className={`text-xl font-black italic tracking-tighter ${inc.urgencyScore >= 70 ? "text-red-500" : inc.urgencyScore >= 40 ? "text-amber-500" : "text-emerald-500"}`}>
@@ -209,7 +209,7 @@ export default function AdminDashboard() {
                         {selectedIncident ? (
                             <div className="glass rounded-[3rem] overflow-hidden border border-white/10 shadow-3xl">
                                 <div className="h-40 relative">
-                                    <img src={selectedIncident.imageUrl} className="w-full h-full object-cover" />
+                                    {selectedIncident.imageUrl ? <img src={selectedIncident.imageUrl} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-slate-900 text-[10px] font-black uppercase text-slate-700 tracking-widest">No Image</div>}
                                 </div>
 
                                 <div className="p-8 space-y-8">

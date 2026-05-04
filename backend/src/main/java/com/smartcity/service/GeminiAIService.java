@@ -10,7 +10,7 @@ import java.util.*;
 @Service
 public class GeminiAIService {
 
-    @Value("${gemini.api.key}")
+    @Value("${ai.gemini.secret}")
     private String apiKey;
 
     @Value("${gemini.api.url}")
@@ -23,7 +23,9 @@ public class GeminiAIService {
         try {
             String prompt = "Analyze this urban incident. Description: " + description +
                     ". Return ONLY a JSON object with keys: type (fire, accident, trash, infrastructure), " +
-                    "urgency (Simple, Moyen, Très urgent), and action (suggested solution).";
+                    "urgency (Simple, Moyen, Très urgent), urgencyScore (an integer from 0 to 100 representing exact severity, 100 being catastrophic), action (suggested solution for administration), " +
+                    "and reporterSuggestion (What the reporter should do right now, e.g. 'Call 15 for Moroccan ambulance/firefighters', 'Call 19 for Moroccan police', 'Call 150 for civil protection'). " +
+                    "CRITICAL: Detect the language used in the Description (e.g., French, Arabic, English, Darija) and write the 'action' and 'reporterSuggestion' in that EXACT language.";
 
             Map<String, Object> requestBody = createGeminiRequest(prompt, imageBase64);
             String response = restTemplate.postForObject(apiUrl + "?key=" + apiKey, requestBody, String.class);
@@ -61,7 +63,9 @@ public class GeminiAIService {
             Map<String, String> analysis = new HashMap<>();
             analysis.put("type", result.path("type").asText("infrastructure"));
             analysis.put("urgency", result.path("urgency").asText("Moyen"));
+            analysis.put("urgencyScore", result.path("urgencyScore").asText("50"));
             analysis.put("action", result.path("action").asText("Conduct inspection."));
+            analysis.put("reporterSuggestion", result.path("reporterSuggestion").asText("No immediate action needed."));
             return analysis;
         } catch (Exception e) {
             return getFallbackAnalysis("");
@@ -75,15 +79,21 @@ public class GeminiAIService {
         if (desc.contains("fire") || desc.contains("smoke")) {
             fallback.put("type", "fire");
             fallback.put("urgency", "Très urgent");
+            fallback.put("urgencyScore", "95");
             fallback.put("action", "Dispatch fire department immediately.");
+            fallback.put("reporterSuggestion", "Call 15 immediately for the Moroccan fire department and stay away from the area.");
         } else if (desc.contains("trash") || desc.contains("waste")) {
             fallback.put("type", "trash");
             fallback.put("urgency", "Simple");
+            fallback.put("urgencyScore", "20");
             fallback.put("action", "Schedule waste collection.");
+            fallback.put("reporterSuggestion", "Thank you for reporting. No further action is required from you.");
         } else {
             fallback.put("type", "infrastructure");
             fallback.put("urgency", "Moyen");
+            fallback.put("urgencyScore", "50");
             fallback.put("action", "Review for maintenance queue.");
+            fallback.put("reporterSuggestion", "Your report has been logged. Please avoid the area if it poses a danger.");
         }
         return fallback;
     }

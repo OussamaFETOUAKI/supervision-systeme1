@@ -23,17 +23,16 @@ public class IncidentService {
         // Sync AI result to entity
         incident.setType(analysis.get("type"));
         incident.setSuggestedAction(analysis.get("action"));
-        incident.setAssistantMessage(analysis.get("action"));
+        incident.setAssistantMessage(analysis.getOrDefault("reporterSuggestion", "Your report has been received."));
         incident.setUrgency(analysis.get("urgency"));
 
-        // Map Urgency text to numeric score for UI priority bars
-        String urgency = analysis.get("urgency");
-        if ("Très urgent".equalsIgnoreCase(urgency))
-            incident.setUrgencyScore(95);
-        else if ("Moyen".equalsIgnoreCase(urgency))
+        // Use dynamic Urgency Score from AI
+        try {
+            int dynamicScore = Integer.parseInt(analysis.getOrDefault("urgencyScore", "50"));
+            incident.setUrgencyScore(Math.min(100, Math.max(0, dynamicScore)));
+        } catch (NumberFormatException e) {
             incident.setUrgencyScore(50);
-        else
-            incident.setUrgencyScore(20);
+        }
 
         incident.setStatus("PENDING");
         incident.setCreatedAt(LocalDateTime.now());
@@ -111,7 +110,7 @@ public class IncidentService {
     }
 
     public long getUrgentCount() {
-        return getAllIncidents().stream().filter(i -> i.getUrgencyScore() >= 90).count();
+        return getAllIncidents().stream().filter(i -> i.getUrgencyScore() != null && i.getUrgencyScore() >= 90).count();
     }
 
     public long getResolvedCount() {
