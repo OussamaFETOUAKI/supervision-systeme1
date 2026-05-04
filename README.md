@@ -116,3 +116,4 @@ The system uses keyword detection in incident descriptions:
 
 Built for Smart City course demonstration.
 Architecture: Clean MVC (Controller → Service → Repository)
+"# Supervision-System" 
